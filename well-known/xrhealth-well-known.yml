@@ -1,0 +1,132 @@
+generated: '2026-09-04'
+method: probed
+source: Live HTTP probes on 2026-09-04 of the named /.well-known/ path list
+hit_count: 0
+path_echo_control: passed
+note: >-
+  Every named path was probed on every host this record knows and NONE returned a document. Three
+  distinct walls were observed and are recorded verbatim below rather than collapsed: (1)
+  www.xr.health and xr.health sit behind a SiteGround "sgcaptcha" JavaScript robot challenge that
+  answers HTTP 202 with a 169-222 byte meta-refresh shell for EVERY path, including a
+  negative-control path that cannot exist - so no 202 on that host is a hit; (2) api.xr.health is an
+  AWS API Gateway that answers 403 with a fixed JSON error stub for every path outside /v1, again
+  including the negative control; (3) developer.xr.health and platform.xr.health (Next.js on Vercel)
+  return real 404s. No WellKnown and no SecurityTxt pointer is emitted, because the provider serves
+  none of these documents. XRHealth DOES publish a JWKS, but at the API-versioned path
+  https://api.xr.health/v1/.well-known/jwks.json, which is an operation in its OpenAPI
+  (getPatientApiJwks) rather than a host-root discovery document; it is recorded in
+  authentication/xrhealth-authentication.yml, not here.
+hosts:
+- host: https://api.xr.health
+  soft_404_control:
+    path: /.well-known/xrhealth-negative-control-7f3ab91c.json
+    status: 403
+    bytes: 37
+    verdict: fixed-error-stub-on-every-path
+  documents:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /.well-known/openid-configuration, status: 403}
+  - {path: /.well-known/oauth-authorization-server, status: 403}
+  - {path: /.well-known/oauth-protected-resource, status: 403}
+  - {path: /.well-known/api-catalog, status: 403}
+  - {path: /.well-known/ai-plugin.json, status: 403}
+  - {path: /.well-known/aauth-resource.json, status: 403}
+  - {path: /.well-known/agent-card.json, status: 403}
+  - {path: /.well-known/agent.json, status: 403}
+  - {path: /.well-known/apis.json, status: 403}
+  - {path: /apis.json, status: 403}
+  - {path: /apis.yml, status: 403}
+- host: https://xr.health
+  soft_404_control:
+    path: /.well-known/xrhealth-negative-control-7f3ab91c.json
+    status: 202
+    bytes: 222
+    verdict: bot-challenge-shell-on-every-path
+  documents:
+  - {path: /.well-known/security.txt, status: 202}
+  - {path: /.well-known/openid-configuration, status: 202}
+  - {path: /.well-known/oauth-authorization-server, status: 202}
+  - {path: /.well-known/oauth-protected-resource, status: 202}
+  - {path: /.well-known/api-catalog, status: 202}
+  - {path: /.well-known/ai-plugin.json, status: 202}
+  - {path: /.well-known/aauth-resource.json, status: 202}
+  - {path: /.well-known/agent-card.json, status: 202}
+  - {path: /.well-known/agent.json, status: 202}
+  - {path: /.well-known/apis.json, status: 202}
+  - {path: /apis.json, status: 202}
+  - {path: /apis.yml, status: 202}
+- host: https://www.xr.health
+  soft_404_control:
+    path: /.well-known/xrhealth-negative-control-7f3ab91c.json
+    status: 202
+    bytes: 222
+    verdict: bot-challenge-shell-on-every-path
+  documents:
+  - {path: /.well-known/security.txt, status: 202}
+  - {path: /.well-known/openid-configuration, status: 202}
+  - {path: /.well-known/oauth-authorization-server, status: 202}
+  - {path: /.well-known/oauth-protected-resource, status: 202}
+  - {path: /.well-known/api-catalog, status: 202}
+  - {path: /.well-known/ai-plugin.json, status: 202}
+  - {path: /.well-known/aauth-resource.json, status: 202}
+  - {path: /.well-known/agent-card.json, status: 202}
+  - {path: /.well-known/agent.json, status: 202}
+  - {path: /.well-known/apis.json, status: 202}
+  - {path: /apis.json, status: 202}
+  - {path: /apis.yml, status: 202}
+- host: https://developer.xr.health
+  soft_404_control:
+    path: /.well-known/xrhealth-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 10028
+    verdict: real-404
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/apis.json, status: 404}
+  - {path: /apis.json, status: 404}
+- host: https://platform.xr.health
+  soft_404_control:
+    path: /.well-known/xrhealth-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 7580
+    verdict: real-404
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/apis.json, status: 404}
+  - {path: /apis.json, status: 307}
+  - {path: /apis.yml, status: 307}
+- host: https://docs.xr.health
+  soft_404_control:
+    path: /.well-known/xrhealth-negative-control-7f3ab91c.json
+    status: 403
+    bytes: 111
+    verdict: s3-accessdenied-on-every-path
+  documents:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /.well-known/openid-configuration, status: 403}
+  - {path: /.well-known/oauth-authorization-server, status: 403}
+  - {path: /.well-known/oauth-protected-resource, status: 403}
+  - {path: /.well-known/api-catalog, status: 403}
+  - {path: /.well-known/ai-plugin.json, status: 403}
+  - {path: /.well-known/aauth-resource.json, status: 403}
+  - {path: /.well-known/agent-card.json, status: 403}
+  - {path: /.well-known/agent.json, status: 403}
+  - {path: /.well-known/apis.json, status: 403}
+  - {path: /apis.json, status: 403}
+  - {path: /apis.yml, status: 403}

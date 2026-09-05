@@ -1,0 +1,22 @@
+generated: '2026-09-04'
+method: searched
+source: >-
+  https://developer.xr.health/ (probed 2026-09-04) and https://www.xr.health/pricing/ (probed
+  2026-09-04)
+plan_count: 0
+plans: []
+api_pricing_published: false
+note: >-
+  XRHealth publishes NO pricing, tiers, quotas or overage terms for its API. The XRH Developer
+  portal is invitation-only - its sign-in page reads "Use your invited XRHealth developer account" -
+  so API access is granted by arrangement, not purchased from a published price list, and every
+  documentation path under developer.xr.health returned 404 to an unauthenticated client. XRHealth
+  DOES sell consumer and clinical virtual-care subscriptions, and a pricing page exists at
+  https://www.xr.health/pricing/, but that is the price of therapy, not of API access, and the
+  marketing site is behind a SiteGround "sgcaptcha" JavaScript robot challenge that answered HTTP
+  202 with a 179-byte meta-refresh shell to every request - so its contents were not read and no
+  tier is recorded here rather than transcribing a figure from a search snippet.
+evidence:
+- {url: 'https://developer.xr.health/en/login', status: 200, finding: 'invitation-only developer sign-in; no pricing'}
+- {url: 'https://developer.xr.health/en/docs', status: 404, finding: 'no public developer documentation'}
+- {url: 'https://www.xr.health/pricing/', status: 202, finding: 'sgcaptcha robot-challenge shell, 179 bytes; page not readable'}

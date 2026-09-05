@@ -1,0 +1,27 @@
+generated: '2026-09-04'
+method: probed
+source: >-
+  openapi/xrhealth-platform-openapi.yml plus live response-header capture on
+  https://api.xr.health/v1/ and https://api.xr.health/v1/me on 2026-09-04
+limit_count: 0
+limits: []
+response_headers:
+  observed: []
+  probed:
+  - {url: 'https://api.xr.health/v1/', status: 200, ratelimit_headers: none, retry_after: false}
+  - {url: 'https://api.xr.health/v1/me', status: 401, ratelimit_headers: none, retry_after: false}
+  note: >-
+    No X-RateLimit-*, RateLimit-* (RFC 9331 draft) or Retry-After header was returned on any
+    observed response. The only rate-limit signal an agent gets is the bare status code.
+exhaustion_status: 429
+exhaustion_evidence: >-
+  components.responses.RateLimited ("The request was rate limited.") is declared, but only on the
+  two passwordless START operations - startPatientPasswordlessLogin and
+  startPublicPatientPasswordlessLogin - which is consistent with throttling one-time-code issuance
+  per email address. No other operation declares a 429.
+note: >-
+  XRHealth publishes NO rate-limit numbers, windows, scopes or headers. An honest zero: the contract
+  proves a limit exists on code issuance (a documented 429) without saying what it is, and the
+  runtime emits no header an agent could read to back off correctly. Any published figures would sit
+  behind the invitation-only XRH Developer portal at https://developer.xr.health/, which returned
+  HTTP 200 only on /en/login and 404 on every documentation path probed.

@@ -1,0 +1,38 @@
+generated: '2026-09-04'
+method: derived
+source: openapi/xrhealth-platform-openapi.yml
+docs: null
+complete: false
+schemes: []
+schemes_note: >-
+  No oauth2 securityScheme is declared in the document, so 0-working/derive-oauth-scopes.py finds
+  nothing and writes nothing. This file records the scope evidence the contract carries anyway,
+  because the API is OAuth-shaped in every respect except its securityScheme declaration:
+  /auth/public/token accepts grant_type authorization_code and refresh_token, PKCE S256 is required,
+  and both TokenResponse and MeResponse carry scopes.
+scope_carriers:
+- schema: TokenResponse
+  field: scope
+  form: space-delimited string
+  required: true
+- schema: MeResponse
+  field: scopes
+  form: array of string
+  required: true
+scopes:
+- scope: 'patient:login'
+  description: null
+  source: 'openapi/xrhealth-platform-openapi.yml -> components.schemas.TokenResponse.properties.scope.example'
+  confidence: medium
+- scope: 'patient:read'
+  description: null
+  source: 'openapi/xrhealth-platform-openapi.yml -> components.schemas.TokenResponse.properties.scope.example'
+  confidence: medium
+note: >-
+  These two scope names are read from the provider's own published EXAMPLE value
+  ("patient:login patient:read") and are the only scope strings XRHealth publishes anywhere. They
+  are recorded with confidence medium and complete: false: an example is evidence that the
+  patient:<verb> namespace is real, not evidence that these are the only two scopes, and no scope
+  descriptions are published. A scopes/permissions reference page would live behind the
+  invitation-only developer portal at https://developer.xr.health/, where every documentation path
+  probed on 2026-09-04 returned 404 to an unauthenticated client. Nothing here is invented.

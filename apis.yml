@@ -1,23 +1,144 @@
 aid: xrhealth
 name: XRHealth
-description: 'XRHealth is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  XRHealth is an extended-reality (XR) therapeutics and virtual-clinic company, founded in 2016 with
+  offices in Boston, Massachusetts and Tel Aviv, Israel, that delivers FDA-registered and CE-marked
+  virtual and augmented reality treatment for physical rehabilitation, cognitive training, pain
+  management and mental health. Patients receive VR headsets at home and work with licensed
+  clinicians through the XRHealth Virtual Clinic, while therapists use the XRHealth platform to
+  prescribe applications, review session telemetry and track outcomes. The company merged with
+  Amelia Virtual Care in 2023 to form one of the largest XR therapeutics platforms. Its programmable
+  surface is the XRHealth Platform API on api.xr.health — a first-party OpenAPI 3.1 contract covering
+  passwordless patient authentication, PKCE public-client token exchange, refresh-token rotation and
+  JWKS key publication — plus an invitation-only XRH Developer portal for approved integrations.
 url: https://raw.githubusercontent.com/api-evangelist/xrhealth/refs/heads/main/apis.yml
+image: https://blog.xr.health/hubfs/logo%20to%20chat.png
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-09-04'
 modified: '2026-09-04'
 tags:
-- Company
-apis: []
+- Health
+- Digital Health
+- Telehealth
+- Virtual Reality
+- Extended Reality
+- Medical Devices
+- Rehabilitation
+- Mental Health
+- Patient Authentication
+- Healthcare
+tags_raw:
+- health
+- digital-health
+- telehealth
+- virtual-reality
+- extended-reality
+- medical-devices
+- rehabilitation
+- mental-health
+- patient-authentication
+- healthcare
+apis:
+- name: XRHealth Platform API
+  description: >-
+    First-party REST API for XRHealth applications and approved integrations, published as OpenAPI
+    3.1.0 at https://api.xr.health/v1/openapi.json. The document currently describes the platform
+    authentication module: passwordless (one-time email code) patient login for server-side
+    applications holding an X-XRHealth-Application-Token, a PKCE public-client variant for native
+    and browser clients, refresh-token rotation and revocation, a /me subject endpoint, and a JWKS
+    endpoint publishing the public signing keys for XRHealth patient access tokens.
+  humanURL: https://developer.xr.health/
+  baseURL: https://api.xr.health/v1
+  image: https://blog.xr.health/hubfs/logo%20to%20chat.png
+  tags:
+  - Health
+  - Digital Health
+  - Telehealth
+  - Patient Authentication
+  - Extended Reality
+  tags_raw:
+  - health
+  - digital-health
+  - telehealth
+  - patient-authentication
+  - extended-reality
+  properties:
+  - type: OpenAPI
+    url: openapi/xrhealth-platform-openapi.yml
+  - type: OpenAPI
+    url: https://api.xr.health/v1/openapi.json
+  - type: DeveloperPortal
+    url: https://developer.xr.health/
+  - type: Overlay
+    url: overlays/xrhealth-platform-overlay.yaml
+  - type: Authentication
+    url: authentication/xrhealth-authentication.yml
+  - type: Conventions
+    url: conventions/xrhealth-conventions.yml
+  - type: ErrorCatalog
+    url: errors/xrhealth-problem-types.yml
+  - type: DataModel
+    url: data-model/xrhealth-data-model.yml
+  - type: OAuthScopes
+    url: scopes/xrhealth-scopes.yml
+  - type: RateLimits
+    url: rate-limits/xrhealth-rate-limits.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/xrhealth-agentic-access.yml
+- type: DomainSecurity
+  url: security/xrhealth-domain-security.yml
+- type: Authentication
+  url: authentication/xrhealth-authentication.yml
 - type: Website
-  url: https://forgeglobal.com/xrhealth_stock/
+  url: https://www.xr.health/
+- type: DeveloperPortal
+  url: https://developer.xr.health/
+- type: SignUp
+  url: https://developer.xr.health/en/login
+- type: Login
+  url: https://platform.xr.health/en/login
+- type: Support
+  url: https://support.xr.health/hc/en-us
+- type: Blog
+  url: https://blog.xr.health/
+- type: Pricing
+  url: https://www.xr.health/pricing/
+- type: TermsOfService
+  url: https://platform.xr.health/en/p/terms
+- type: PrivacyPolicy
+  url: https://platform.xr.health/en/p/privacy
+- type: Packages
+  url: packages/xrhealth-packages.yml
+- type: LLMsTxt
+  url: llms/xrhealth-llms.txt
+- type: Conventions
+  url: conventions/xrhealth-conventions.yml
+- type: ErrorCatalog
+  url: errors/xrhealth-problem-types.yml
+- type: DataModel
+  url: data-model/xrhealth-data-model.yml
+- type: Lifecycle
+  url: lifecycle/xrhealth-lifecycle.yml
+- type: Conformance
+  url: conformance/xrhealth-conformance.yml
+- type: OAuthScopes
+  url: scopes/xrhealth-scopes.yml
+- type: RateLimits
+  url: rate-limits/xrhealth-rate-limits.yml
+- type: Plans
+  url: plans/xrhealth-plans-pricing.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-09-04'
+  status: enriched
+  artifacts_added: 21
+  pass: local-v3

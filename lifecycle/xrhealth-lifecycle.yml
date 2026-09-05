@@ -1,0 +1,41 @@
+generated: '2026-09-04'
+method: derived
+source: >-
+  openapi/xrhealth-platform-openapi.yml, live probes of https://api.xr.health/v1/ and DNS/HTTP
+  probes of the xr.health host set on 2026-09-04
+versioning:
+  scheme: uri-path
+  current: v1
+  evidence: >-
+    servers[] is the relative "/v1"; https://api.xr.health/v1/ returns
+    {"service":"xrhealth-api","api_version":"v1","status":"ok","version":"0.1.4"}. A /v2 path was
+    probed and returns the gateway's 403 stub, so v1 is the only live major version.
+  build_version: 0.1.4
+  build_version_source: 'https://api.xr.health/v1/ (getApiMetadata), observed 2026-09-04'
+  info_version: 1.0.0
+  note: >-
+    The contract carries info.version 1.0.0 while the running service reports version 0.1.4. The two
+    numbers disagree and neither is dated, so a consumer cannot tell from either one whether the
+    contract they hold matches the deployment they are calling.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  evidence: >-
+    No deprecation or sunset policy is published on any readable XRHealth surface, and no operation
+    in the OpenAPI carries deprecated: true. RFC 8594 Sunset/Deprecation headers were not present on
+    any observed response.
+sla:
+  url: null
+  uptime_target: null
+status_page:
+  url: null
+  evidence: >-
+    status.xr.health is NXDOMAIN (checked 2026-09-04). No third-party status page (Statuspage,
+    Instatus, Better Stack) was found for XRHealth. The API does expose a liveness signal -
+    GET https://api.xr.health/v1/ returns "status":"ok" - but a health endpoint is not a status page
+    and no incident history is published.
+deprecated_operations: []
+support:
+  url: https://support.xr.health/hc/en-us
+  vendor: Zendesk
+  note: 'Live but behind a Cloudflare bot challenge for non-browser clients; observed HTTP 403 "Just a moment..." on 2026-09-04.'

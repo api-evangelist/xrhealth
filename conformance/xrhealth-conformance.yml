@@ -1,0 +1,64 @@
+generated: '2026-09-04'
+method: derived
+source: >-
+  openapi/xrhealth-platform-openapi.yml (harvested verbatim from
+  https://api.xr.health/v1/openapi.json) plus live response-header observation on api.xr.health
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: 'openapi: 3.1.0 declared in the published document at https://api.xr.health/v1/openapi.json'
+- id: oauth2-authorization-code
+  conforms: partial
+  evidence: >-
+    /auth/public/token accepts grant_type authorization_code and refresh_token, and the request
+    schema uses the OAuth 2.0 field names client_id, authorization_code, code_verifier and
+    refresh_token; however no oauth2 securityScheme is declared in the document and no RFC 8414 /
+    OIDC discovery document is served, so this is an OAuth-shaped bespoke flow rather than a
+    declared, discoverable OAuth 2.0 authorization server.
+- id: rfc7636-pkce
+  conforms: true
+  evidence: >-
+    PublicPasswordlessStartRequest requires code_challenge (43-128 chars) and code_challenge_method
+    with enum [S256]; PublicTokenRequest carries code_verifier (43-128 chars).
+- id: rfc6750-bearer-token
+  conforms: true
+  evidence: 'securitySchemes.patientBearer is type http, scheme bearer, bearerFormat JWT; TokenResponse.token_type enum is [Bearer].'
+- id: rfc7517-jwks
+  conforms: true
+  evidence: 'getPatientApiJwks serves a JSON Web Key Set at /v1/.well-known/jwks.json; probed 2026-09-04, HTTP 200, RSA keys returned.'
+- id: rfc6749-token-revocation
+  conforms: partial
+  evidence: >-
+    /auth/token/revoke and /auth/public/token/revoke revoke refresh tokens with a JSON body, not the
+    RFC 7009 application/x-www-form-urlencoded token revocation endpoint shape.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Error responses observed live on api.xr.health return application/json bodies of the form
+    {"error":"request_error","request_id":"<uuid>"}; the document's shared 4xx/5xx responses declare
+    a description only and no application/problem+json media type.
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: false
+  evidence: '/.well-known/oauth-authorization-server probed on api.xr.health, xr.health, www.xr.health, developer.xr.health, platform.xr.health on 2026-09-04 - no document served.'
+- id: openid-connect-discovery
+  conforms: false
+  evidence: '/.well-known/openid-configuration probed on all five known hosts on 2026-09-04 - no document served.'
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: '/.well-known/security.txt probed on all five known hosts on 2026-09-04 - no document served.'
+- id: fhir
+  conforms: false
+  evidence: >-
+    No FHIR resource shapes, no CapabilityStatement and no /fhir path appear in the published
+    contract. XRHealth is a clinical XR therapeutics provider, so FHIR is the standard its market
+    would use for clinical data exchange; the published surface is an authentication module only,
+    and any FHIR-shaped exchange would live behind the invitation-only developer portal.
+domain_standards:
+  checked: [fhir-r4, fhir-r5, smart-on-fhir, hl7v2, dicom, x12, ihe-xds]
+  found: []
+  note: >-
+    REWARD-ONLY check, and nothing was found to reward. The one publicly readable XRHealth contract
+    covers patient authentication, not clinical data exchange, so no health-domain standard
+    signature (FHIR resource URLs, SMART on FHIR scopes, HL7v2 message types, DICOM UIDs, X12
+    transaction sets) can appear in it. This is recorded as an honest absence in the PUBLIC surface,
+    not as a claim that XRHealth exchanges no standards-based clinical data internally.

@@ -1,0 +1,46 @@
+generated: '2026-09-04'
+method: searched
+source: >-
+  Registry searches on 2026-09-04 across npm, PyPI, RubyGems, crates.io and GitHub, plus the
+  XRHealth developer portal at https://developer.xr.health/ and the published OpenAPI at
+  https://api.xr.health/v1/openapi.json
+package_count: 0
+packages: []
+searched:
+- registry: npm
+  query: https://registry.npmjs.org/-/v1/search?text=xrhealth
+  status: 200
+  results: 0
+- registry: npm
+  query: https://registry.npmjs.org/-/v1/search?text=xr.health
+  status: 200
+  results: 0
+- registry: pypi
+  query: https://pypi.org/pypi/xrhealth/json
+  status: 404
+  results: 0
+- registry: pypi
+  query: https://pypi.org/pypi/xr-health/json
+  status: 404
+  results: 0
+- registry: rubygems
+  query: https://rubygems.org/api/v1/gems/xrhealth.json
+  status: 404
+  results: 0
+- registry: crates.io
+  query: https://crates.io/api/v1/crates?q=xrhealth
+  status: 200
+  results: 0
+- registry: github
+  query: https://api.github.com/users/xrhealth
+  status: 200
+  results: 0
+  note: >-
+    github.com/xrhealth exists but is an empty personal account with 0 public repositories; no
+    XRHealth GitHub organization publishing client libraries was found.
+note: >-
+  No first-party XRHealth client library was found in any public package registry, and the OpenAPI
+  document publishes no SDK links. The XRH Developer portal (https://developer.xr.health/) is
+  invitation-only, so any SDK distributed to approved integration partners would not be visible to
+  an unauthenticated search. Recorded as a checked zero, not an unchecked gap. No SDKs pointer is
+  emitted, because no official client library was observed.

@@ -1,0 +1,82 @@
+generated: '2026-09-04'
+method: derived
+source: openapi/xrhealth-platform-openapi.yml components.schemas and operation request/response bindings
+entities:
+- name: Application
+  description: >-
+    An XRHealth application or approved integration. Identified to the API either by the
+    X-XRHealth-Application-Token header (confidential/server-side) or by client_id (registered
+    public client). Surfaced back to the caller as MeResponse.application.
+  schemas: [MeResponse]
+  identifier: 'client_id (string, 8-128 chars) for public clients; opaque application token for confidential clients'
+- name: PatientSubject
+  description: >-
+    The opaque public identifier for a patient. Never an email or a clinical record id in this
+    contract - TokenResponse.subject is documented as "Opaque public patient subject."
+  schemas: [TokenResponse, MeResponse]
+  identifier: subject (string, opaque)
+- name: PasswordlessRequest
+  description: >-
+    A one-time email login challenge. Created by a start operation, consumed by the matching verify
+    operation. Carries a request_id (uuid) that must be echoed back alongside the emailed code.
+  schemas: [PasswordlessStartRequest, PasswordlessVerifyRequest, PublicPasswordlessStartRequest, PublicPasswordlessVerifyRequest]
+  identifier: 'request_id (uuid), scoped to email'
+  fields:
+    code: 'string matching ^\d{4,8}$'
+- name: AuthorizationCode
+  description: >-
+    A short-lived, single-use PKCE authorization code returned to a public client, exchanged for
+    tokens at /auth/public/token with the matching code_verifier.
+  schemas: [AuthorizationCodeResponse, PublicTokenRequest]
+  identifier: 'authorization_code (string, min 16 chars)'
+  fields:
+    expires_in: 'integer seconds; the published example is 60'
+- name: TokenGrant
+  description: >-
+    An issued pair of a JWT access token and a rotating refresh token, with the granted scope string
+    and the patient subject it represents.
+  schemas: [TokenResponse, RefreshTokenRequest, PublicTokenRevokeRequest]
+  identifier: 'refresh_token (string, min 16 chars)'
+  fields:
+    token_type: 'enum [Bearer]'
+    expires_in: 'integer seconds; the published example is 900'
+    refresh_token_expires_in: 'integer seconds; the published example is 2592000'
+    scope: 'space-delimited string; the published example is "patient:login patient:read"'
+- name: JsonWebKeySet
+  description: 'The public RSA signing keys used to verify XRHealth patient access tokens.'
+  schemas: [inline object at /.well-known/jwks.json response]
+  identifier: 'keys[] (JWK array)'
+relationships:
+- from: Application
+  to: PasswordlessRequest
+  kind: has_many
+  via: 'X-XRHealth-Application-Token header or client_id in PublicPasswordlessStartRequest'
+- from: PasswordlessRequest
+  to: AuthorizationCode
+  kind: has_one
+  via: 'verifyPublicPatientPasswordlessLogin exchanges request_id + code for authorization_code'
+- from: PasswordlessRequest
+  to: TokenGrant
+  kind: has_one
+  via: 'verifyPatientPasswordlessLogin exchanges request_id + code for a TokenResponse (confidential clients)'
+- from: AuthorizationCode
+  to: TokenGrant
+  kind: has_one
+  via: 'exchangePublicPatientToken with grant_type authorization_code + code_verifier'
+- from: TokenGrant
+  to: PatientSubject
+  kind: belongs_to
+  via: TokenResponse.subject
+- from: TokenGrant
+  to: Application
+  kind: belongs_to
+  via: MeResponse.application
+- from: TokenGrant
+  to: JsonWebKeySet
+  kind: verified_by
+  via: 'the JWT access token is signed by a key published at getPatientApiJwks'
+note: >-
+  The published contract models identity and authorization only. No patient, clinician, session,
+  prescription, outcome or device entity appears in it, even though those are the objects XRHealth's
+  product manages - they live behind the invitation-only XRH Developer portal. This ERD therefore
+  describes the door, not the building.

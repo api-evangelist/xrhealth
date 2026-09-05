@@ -1,0 +1,124 @@
+generated: '2026-09-04'
+method: derived
+source: >-
+  openapi/xrhealth-platform-openapi.yml plus live request/response observation on
+  https://api.xr.health/v1/ and https://api.xr.health/v1/me on 2026-09-04
+authentication:
+  style: two-credential
+  application_credential:
+    scheme: apiKey
+    location: header
+    name: X-XRHealth-Application-Token
+    applies_to: [startPatientPasswordlessLogin, verifyPatientPasswordlessLogin, refreshPatientToken, revokePatientToken, getCurrentPatient]
+  patient_credential:
+    scheme: http bearer
+    format: JWT
+    verification: 'Public keys published at https://api.xr.health/v1/.well-known/jwks.json (getPatientApiJwks)'
+  public_client_flow:
+    description: >-
+      Registered public clients (native and browser apps) use a client_id plus PKCE instead of the
+      application token: start and verify passwordless login, receive a short-lived authorization
+      code, then exchange it at /auth/public/token with a code_verifier.
+    pkce: 'required, code_challenge_method enum is [S256] only'
+  cross_link: authentication/xrhealth-authentication.yml
+versioning:
+  style: uri-path
+  current: v1
+  cross_link: lifecycle/xrhealth-lifecycle.yml
+idempotency:
+  supported: false
+  coverage: none
+  header: null
+  evidence: >-
+    No Idempotency-Key (or equivalent) parameter, header or request-body field appears anywhere in
+    the published contract, and no idempotency guidance is published on any readable XRHealth
+    surface. All ten write operations are POSTs with no replay protection.
+  note: >-
+    The consequences are concrete rather than theoretical for this contract: a retried
+    startPatientPasswordlessLogin sends a patient a second one-time code, and a retried
+    exchangePublicPatientToken re-presents an authorization code that the server is expected to
+    treat as single-use, so a duplicate is a failure rather than a no-op. An agent must therefore
+    treat every retry here as a new side effect.
+pagination:
+  supported: false
+  evidence: 'No collection-returning operation exists in the published contract; there is nothing to page.'
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+request_tracing:
+  supported: true
+  request_header: null
+  response_header: x-request-id
+  body_field: request_id
+  cors_exposed: true
+  evidence: >-
+    Observed live on https://api.xr.health/v1/ and /v1/me: every response carries x-request-id, and
+    access-control-expose-headers: x-request-id makes it readable to browser clients. Error bodies
+    repeat the same value as request_id. This is the strongest runtime convention in the contract
+    and the value to quote to XRHealth support.
+  aws_headers: 'x-amzn-requestid and x-amz-apigw-id are also present (AWS API Gateway), but x-request-id is the XRHealth-owned identifier.'
+error_envelope:
+  format: bespoke-json
+  shape: '{"error": "<code>", "request_id": "<uuid>"}'
+  rfc9457: false
+  cross_link: errors/xrhealth-problem-types.yml
+rate_limit_signaling:
+  headers: none
+  status: 429
+  cross_link: rate-limits/xrhealth-rate-limits.yml
+content_negotiation:
+  request: application/json
+  response: 'application/json; charset=utf-8'
+  strictness: 'Every request schema sets additionalProperties: false, so an unrecognised field is a 400 rather than an ignored one.'
+dry_run_mode:
+  supported: false
+  coverage: none
+  evidence: 'No test mode, no sandbox host, no simulate/dry-run parameter appears in the contract or on any readable surface.'
+reversibility:
+  grade: documented
+  credit: 0.4
+  write_surface:
+  - operation: verifyPatientPasswordlessLogin
+    effect: 'Issues a patient access token and a refresh token.'
+    reversal_operation: revokePatientToken
+    reversal_effect: 'The refresh token is no longer usable.'
+    window: null
+    window_source: null
+  - operation: exchangePublicPatientToken
+    effect: 'Issues a public-client access token and refresh token from a PKCE authorization code, or rotates an existing refresh token.'
+    reversal_operation: revokePublicPatientToken
+    reversal_effect: 'The refresh token is no longer usable.'
+    window: null
+    window_source: null
+  - operation: refreshPatientToken
+    effect: 'Rotates a patient refresh token.'
+    reversal_operation: revokePatientToken
+    reversal_effect: 'The refresh token is no longer usable.'
+    window: null
+    window_source: null
+  - operation: startPatientPasswordlessLogin
+    effect: 'Sends a one-time login code to a patient email address.'
+    reversal_operation: null
+    reversal_effect: 'None. An email that has been sent cannot be recalled.'
+    window: null
+    window_source: null
+  - operation: startPublicPatientPasswordlessLogin
+    effect: 'Sends a one-time login code to a patient email address for a registered public client.'
+    reversal_operation: null
+    reversal_effect: 'None.'
+    window: null
+    window_source: null
+  irreversible:
+  - operation: revokePatientToken
+    note: 'Revocation itself is terminal; there is no un-revoke operation. Recovery is a fresh passwordless login.'
+  - operation: revokePublicPatientToken
+    note: 'Terminal; no un-revoke operation.'
+  note: >-
+    GRADED "documented", not "verified": a reversal path genuinely exists for every token-issuing
+    write (revoke undoes a grant), but XRHealth states NO window for it anywhere. The token lifetimes
+    that appear in the contract - expires_in 900 and refresh_token_expires_in 2592000 - are OpenAPI
+    "example" values on TokenResponse, not a published policy, so they are recorded here as evidence
+    of shape and deliberately NOT written into window:. Inventing a 30-day reversal window from an
+    example integer is exactly the error this field exists to prevent. Two of the five write
+    operations - the two that send email to a patient - have no reversal at all.

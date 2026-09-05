@@ -64,5 +64,31 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-XRHealth is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/xrhealth_stock/
+XRHealth is an extended-reality (XR) therapeutics and virtual-clinic company, founded in 2016 with
+offices in Boston, Massachusetts and Tel Aviv, Israel, delivering FDA-registered and CE-marked VR/AR
+treatment for physical rehabilitation, cognitive training, pain management and mental health.
+
+## What XRHealth publishes
+
+XRHealth serves a first-party **OpenAPI 3.1.0** document, unauthenticated, at
+<https://api.xr.health/v1/openapi.json> — the *XRHealth Platform API*, 12 operations covering
+passwordless patient login, PKCE public-client token exchange, refresh-token rotation and
+revocation, a `/me` subject endpoint and a JWKS endpoint. Its own `503` wording ("The authentication
+module is temporarily unavailable") is the evidence that this is one module of a larger platform
+API. Everything else sits behind the invitation-only **XRH Developer** portal at
+<https://developer.xr.health/>, whose sign-in page reads "Use your invited XRHealth developer
+account"; every documentation path there returned `404` to an unauthenticated client on 2026-09-04.
+
+Probed and recorded as honest absences: no `/.well-known/` document on any of the six hosts, no A2A
+agent card, no MCP server, no AsyncAPI or webhook catalog, no SDK in any public package registry, no
+status page (`status.xr.health` is NXDOMAIN), no changelog, no deprecation policy, no published rate
+limits or API pricing, and no idempotency mechanism on any of the ten write operations.
+
+The marketing site `www.xr.health` sits behind a SiteGround "sgcaptcha" JavaScript robot challenge
+that answers HTTP 202 with a meta-refresh shell to every non-browser request, so its pages are
+recorded as live-but-unread rather than transcribed from search snippets.
+
+- Website: <https://www.xr.health/>
+- Developer portal: <https://developer.xr.health/>
+- API: <https://api.xr.health/v1>
+- Blog: <https://blog.xr.health/>

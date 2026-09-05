@@ -1,0 +1,22 @@
+generated: '2026-09-04'
+method: derived
+source: openapi/xrhealth-platform-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: applicationToken
+  type: apiKey
+  in: header
+  parameter: X-XRHealth-Application-Token
+  sources:
+  - openapi/xrhealth-platform-openapi.yml
+- name: patientBearer
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/xrhealth-platform-openapi.yml

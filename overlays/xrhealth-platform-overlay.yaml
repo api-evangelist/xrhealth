@@ -1,0 +1,105 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the XRHealth Platform API
+  version: 1.0.0
+extends: openapi/xrhealth-platform-openapi.yml
+x-generated: '2026-09-04'
+x-method: generated
+x-source: >-
+  Enhancements derived from the harvested contract at https://api.xr.health/v1/openapi.json plus
+  live observation of api.xr.health on 2026-09-04. The harvested document at
+  openapi/_original/xrhealth-openapi.json is never mutated.
+actions:
+- target: $.info
+  update:
+    contact:
+      name: XRHealth Developer Portal
+      url: https://developer.xr.health/
+    x-apievangelist-profile: https://apis.io/provider/xrhealth/
+    x-apievangelist-harvested-from: https://api.xr.health/v1/openapi.json
+    x-apievangelist-harvested: '2026-09-04'
+- target: $.servers
+  update:
+  - url: https://api.xr.health/v1
+    description: >-
+      Production. Resolved from the relative "/v1" servers entry in the published document, per
+      RFC 3986 relative-reference resolution against the retrieval URL.
+- target: $.info
+  update:
+    x-apievangelist-observed-conventions:
+      request_id_header: x-request-id
+      request_id_cors_exposed: true
+      error_envelope: '{"error": "<code>", "request_id": "<uuid>"}'
+      rfc9457: false
+      idempotency: none
+      rate_limit_headers: none
+- target: $.paths['/'].get
+  update:
+    tags: [Service]
+    description: >-
+      Returns the running service identity and build version. Observed 2026-09-04:
+      {"service":"xrhealth-api","api_version":"v1","status":"ok","version":"0.1.4"}. Useful as a
+      liveness probe; XRHealth publishes no status page.
+- target: $.paths['/openapi.json'].get
+  update:
+    tags: [Service]
+    description: 'The API is self-describing: this operation serves the very document being annotated.'
+- target: $.paths['/auth/passwordless/start'].post
+  update:
+    tags: [Authentication]
+    description: >-
+      Confidential (server-side) flow. Sends a one-time code to the patient email address. NOT
+      idempotent - a retry sends the patient a second code. The only other operation declaring a 429
+      is its public-client twin, which is consistent with per-email throttling of code issuance.
+- target: $.paths['/auth/passwordless/verify'].post
+  update:
+    tags: [Authentication]
+- target: $.paths['/auth/public/passwordless/start'].post
+  update:
+    tags: [Authentication]
+    description: >-
+      Public-client (native/browser) flow. Requires a registered client_id and a PKCE S256
+      code_challenge. NOT idempotent - a retry sends the patient a second code.
+- target: $.paths['/auth/public/passwordless/verify'].post
+  update:
+    tags: [Authentication]
+- target: $.paths['/auth/public/token'].post
+  update:
+    tags: [Authentication]
+    description: >-
+      Exchanges a single-use PKCE authorization code, or rotates a public-client refresh token. The
+      authorization code is short-lived (the published example expires_in is 60 seconds) and is
+      expected to be single-use, so a blind retry is a failure rather than a no-op.
+- target: $.paths['/auth/public/token/revoke'].post
+  update:
+    tags: [Authentication]
+    description: 'Terminal. There is no un-revoke operation; recovery is a fresh passwordless login.'
+- target: $.paths['/auth/token/refresh'].post
+  update:
+    tags: [Authentication]
+- target: $.paths['/auth/token/revoke'].post
+  update:
+    tags: [Authentication]
+    description: 'Terminal. There is no un-revoke operation; recovery is a fresh passwordless login.'
+- target: $.paths['/me'].get
+  update:
+    tags: [Identity]
+    description: >-
+      Returns the opaque patient subject, the application the token belongs to, and the granted
+      scopes. This is the only operation that reveals the scope vocabulary at runtime.
+- target: $.paths['/.well-known/jwks.json'].get
+  update:
+    tags: [Identity]
+    description: >-
+      JWKS for verifying XRHealth patient access tokens. Note the path is API-versioned
+      (/v1/.well-known/jwks.json), not served at the host root, so it is not a host-level discovery
+      document. Probed 2026-09-04: HTTP 200, RSA keys returned.
+- target: $
+  update:
+    tags:
+    - name: Service
+      description: Service metadata and self-description.
+    - name: Authentication
+      description: Passwordless patient login, PKCE public-client exchange, and token rotation and revocation.
+    - name: Identity
+      description: Patient subject introspection and token-signing key publication.

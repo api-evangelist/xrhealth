@@ -1,0 +1,64 @@
+generated: '2026-09-04'
+method: derived
+status: candidate
+source: openapi/xrhealth-platform-openapi.yml
+searched:
+- what: hosted/remote MCP server for XRHealth
+  where: web search, npm registry (@modelcontextprotocol and xrhealth queries), XRHealth developer
+    portal at https://developer.xr.health/, published OpenAPI
+  result: none found
+- what: DNS for a conventional MCP host
+  where: mcp.xr.health, agent.xr.health
+  result: NXDOMAIN
+- what: JSON-RPC tools/list against the one MCP-plausible path the evidence pointed at
+  where: POST https://api.xr.health/v1/mcp
+  result: 404 request_error
+deployment:
+  mode: none
+  auth: unknown
+  verified: derived
+  note: >-
+    XRHealth ships no MCP server of any kind - no hosted endpoint and no stdio package. The tools
+    below are a CANDIDATE mapping derived from the operations in the provider's own OpenAPI, not a
+    server anyone can call. No endpoint URL is asserted because none exists.
+server:
+  name: xrhealth
+  transport: null
+  url: null
+tools:
+- name: get_api_metadata
+  description: Get XRHealth Platform API service metadata (service name, api_version, status, version).
+  source_operation: openapi/xrhealth-platform-openapi.yml#getApiMetadata
+- name: get_openapi_document
+  description: Retrieve the XRHealth Platform API OpenAPI document.
+  source_operation: openapi/xrhealth-platform-openapi.yml#getOpenApiDocument
+- name: start_patient_passwordless_login
+  description: Send a one-time patient login code to an email address, using a server-side application token.
+  source_operation: openapi/xrhealth-platform-openapi.yml#startPatientPasswordlessLogin
+- name: verify_patient_passwordless_login
+  description: Exchange a one-time email code for XRHealth patient access and refresh tokens.
+  source_operation: openapi/xrhealth-platform-openapi.yml#verifyPatientPasswordlessLogin
+- name: start_public_patient_passwordless_login
+  description: Start passwordless login for a registered public client using a PKCE code challenge.
+  source_operation: openapi/xrhealth-platform-openapi.yml#startPublicPatientPasswordlessLogin
+- name: verify_public_patient_passwordless_login
+  description: Exchange a passwordless code for a short-lived PKCE authorization code.
+  source_operation: openapi/xrhealth-platform-openapi.yml#verifyPublicPatientPasswordlessLogin
+- name: exchange_public_patient_token
+  description: Exchange a PKCE authorization code, or rotate a public-client refresh token, for XRHealth tokens.
+  source_operation: openapi/xrhealth-platform-openapi.yml#exchangePublicPatientToken
+- name: revoke_public_patient_token
+  description: Revoke a public-client refresh token.
+  source_operation: openapi/xrhealth-platform-openapi.yml#revokePublicPatientToken
+- name: refresh_patient_token
+  description: Rotate a patient refresh token using a server-side application token.
+  source_operation: openapi/xrhealth-platform-openapi.yml#refreshPatientToken
+- name: revoke_patient_token
+  description: Revoke a patient refresh token.
+  source_operation: openapi/xrhealth-platform-openapi.yml#revokePatientToken
+- name: get_current_patient
+  description: Get the current public patient subject, the application it belongs to, and its scopes.
+  source_operation: openapi/xrhealth-platform-openapi.yml#getCurrentPatient
+- name: get_patient_api_jwks
+  description: Get the public JSON Web Key Set used to verify XRHealth patient access tokens.
+  source_operation: openapi/xrhealth-platform-openapi.yml#getPatientApiJwks

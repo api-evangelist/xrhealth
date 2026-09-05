@@ -1,0 +1,105 @@
+generated: '2026-09-04'
+method: derived
+source: >-
+  openapi/xrhealth-platform-openapi.yml components.responses and per-operation 4xx/5xx responses,
+  plus live error bodies observed on https://api.xr.health/v1/ on 2026-09-04
+format: bespoke-json
+envelope:
+  media_type: application/json
+  shape: '{"error": "<code>", "request_id": "<uuid>"}'
+  fields:
+  - name: error
+    description: Short machine code for the failure. Observed value on a 401 and a 404 was request_error.
+  - name: request_id
+    description: >-
+      Per-request UUID, also returned in the x-request-id response header and exposed to browsers
+      via access-control-expose-headers. Quote it to XRHealth support when reporting a failure.
+  observed:
+  - {url: 'https://api.xr.health/v1/me', status: 401, body: '{"error":"request_error","request_id":"<uuid>"}'}
+  - {url: 'https://api.xr.health/v1/docs', status: 404, body: '{"error":"request_error","request_id":"<uuid>"}'}
+  note: >-
+    The envelope is NOT RFC 9457 problem+json - there is no type, title, detail or status member and
+    no application/problem+json media type. Observed live error codes are also coarse: a 401 and a
+    404 both return the same "request_error" code, so an agent cannot distinguish the failure class
+    from the body and must read the HTTP status.
+problems:
+- status: 400
+  name: BadRequest
+  title: The request is invalid.
+  source_component: openapi/xrhealth-platform-openapi.yml#/components/responses/BadRequest
+  source_operations:
+  - startPatientPasswordlessLogin
+  - startPublicPatientPasswordlessLogin
+  - revokePublicPatientToken
+  - revokePatientToken
+  remediation: >-
+    Check the request body against the operation's schema; every request schema in this contract
+    sets additionalProperties false, so an unexpected field is itself a 400.
+- status: 401
+  name: Unauthorized
+  title: The application or patient token is invalid.
+  source_component: openapi/xrhealth-platform-openapi.yml#/components/responses/Unauthorized
+  source_operations:
+  - startPatientPasswordlessLogin
+  - verifyPatientPasswordlessLogin
+  - startPublicPatientPasswordlessLogin
+  - verifyPublicPatientPasswordlessLogin
+  - exchangePublicPatientToken
+  - revokePublicPatientToken
+  - refreshPatientToken
+  - revokePatientToken
+  - getCurrentPatient
+  remediation: >-
+    Re-check the X-XRHealth-Application-Token header value, or refresh the patient bearer token via
+    refreshPatientToken / exchangePublicPatientToken. Observed live on GET /v1/me with no credentials.
+- status: 403
+  name: Forbidden
+  title: The token does not have access to this resource.
+  source_component: openapi/xrhealth-platform-openapi.yml#/components/responses/Forbidden
+  source_operations:
+  - startPatientPasswordlessLogin
+  - verifyPatientPasswordlessLogin
+  - startPublicPatientPasswordlessLogin
+  - verifyPublicPatientPasswordlessLogin
+  - exchangePublicPatientToken
+  - getCurrentPatient
+  remediation: >-
+    The credential is valid but is not scoped to the resource. Inspect the scopes returned by
+    getCurrentPatient (MeResponse.scopes) and request the needed scope from XRHealth.
+- status: 429
+  name: RateLimited
+  title: The request was rate limited.
+  source_component: openapi/xrhealth-platform-openapi.yml#/components/responses/RateLimited
+  source_operations:
+  - startPatientPasswordlessLogin
+  - startPublicPatientPasswordlessLogin
+  remediation: >-
+    Back off before re-sending a one-time-code request. Only the two passwordless START operations
+    declare a 429, which is consistent with per-email throttling of code issuance. No RateLimit-*
+    or Retry-After headers were observed on any live response, so the retry interval is not
+    published - see rate-limits/xrhealth-rate-limits.yml.
+- status: 503
+  name: Unavailable
+  title: The authentication module is temporarily unavailable.
+  source_component: openapi/xrhealth-platform-openapi.yml#/components/responses/Unavailable
+  source_operations:
+  - startPatientPasswordlessLogin
+  - verifyPatientPasswordlessLogin
+  - startPublicPatientPasswordlessLogin
+  - verifyPublicPatientPasswordlessLogin
+  - exchangePublicPatientToken
+  - revokePublicPatientToken
+  - refreshPatientToken
+  - revokePatientToken
+  - getCurrentPatient
+  - getPatientApiJwks
+  remediation: >-
+    Retry with backoff. The wording ("the authentication module") is the clearest published evidence
+    that api.xr.health is modular and that the OpenAPI at /v1/openapi.json documents one module of a
+    larger platform API.
+searched:
+- what: a published error-code reference for the XRHealth Platform API
+  where: https://developer.xr.health/ (invitation-only), https://api.xr.health/v1/openapi.json
+  result: >-
+    none public. The OpenAPI declares five shared responses with one-line descriptions and no
+    response schema, so titles above are the provider's own wording and remediation is derived.

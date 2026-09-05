@@ -1,0 +1,23 @@
+generated: '2026-09-04'
+method: generated
+source: >-
+  Generated from openapi/xrhealth-platform-openapi.yml (harvested verbatim from
+  https://api.xr.health/v1/openapi.json), conventions/xrhealth-conventions.yml and
+  errors/xrhealth-problem-types.yml. Every operationId referenced was verified present in the spec.
+searched:
+- what: provider-published Agent Skills or AGENTS.md
+  where: https://developer.xr.health/, https://api.xr.health/v1/openapi.json, GitHub
+  result: none found
+skills:
+- file: xrhealth-server-side-patient-login.md
+  name: XRHealth server-side patient login
+  api: openapi/xrhealth-platform-openapi.yml
+  operations: [startPatientPasswordlessLogin, verifyPatientPasswordlessLogin, getCurrentPatient, refreshPatientToken, revokePatientToken]
+- file: xrhealth-public-client-pkce-login.md
+  name: XRHealth public-client PKCE login
+  api: openapi/xrhealth-platform-openapi.yml
+  operations: [startPublicPatientPasswordlessLogin, verifyPublicPatientPasswordlessLogin, exchangePublicPatientToken, revokePublicPatientToken, getPatientApiJwks]
+note: >-
+  Only two skills, because the publicly readable XRHealth contract is an authentication module and
+  those are its two complete flows. No skill is written for a clinical, session or outcome flow,
+  because no such operation exists in any contract XRHealth publishes publicly.
