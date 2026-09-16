@@ -41,38 +41,114 @@ tags_raw:
 - patient-authentication
 - healthcare
 apis:
-- name: XRHealth Platform API
-  description: >-
-    First-party REST API for XRHealth applications and approved integrations, published as OpenAPI
-    3.1.0 at https://api.xr.health/v1/openapi.json. The document currently describes the platform
-    authentication module: passwordless (one-time email code) patient login for server-side
-    applications holding an X-XRHealth-Application-Token, a PKCE public-client variant for native
-    and browser clients, refresh-token rotation and revocation, a /me subject endpoint, and a JWKS
-    endpoint publishing the public signing keys for XRHealth patient access tokens.
+- aid: xrhealth:xrhealth-auth-api
+  name: XRHealth Auth API
+  description: The Auth API from XRHealth — 8 operation(s) for auth.
   humanURL: https://developer.xr.health/
   baseURL: https://api.xr.health/v1
-  image: https://blog.xr.health/hubfs/logo%20to%20chat.png
   tags:
-  - Health
-  - Digital Health
-  - Telehealth
-  - Patient Authentication
-  - Extended Reality
-  tags_raw:
-  - health
-  - digital-health
-  - telehealth
-  - patient-authentication
-  - extended-reality
+  - Auth
   properties:
   - type: OpenAPI
-    url: openapi/xrhealth-platform-openapi.yml
-  - type: OpenAPI
-    url: https://api.xr.health/v1/openapi.json
+    url: openapi/xrhealth-auth-api-openapi.yml
   - type: DeveloperPortal
     url: https://developer.xr.health/
-  - type: Overlay
-    url: overlays/xrhealth-platform-overlay.yaml
+  - type: Authentication
+    url: authentication/xrhealth-authentication.yml
+  - type: Conventions
+    url: conventions/xrhealth-conventions.yml
+  - type: ErrorCatalog
+    url: errors/xrhealth-problem-types.yml
+  - type: DataModel
+    url: data-model/xrhealth-data-model.yml
+  - type: OAuthScopes
+    url: scopes/xrhealth-scopes.yml
+  - type: RateLimits
+    url: rate-limits/xrhealth-rate-limits.yml
+- aid: xrhealth:xrhealth-me-api
+  name: XRHealth Me API
+  description: The Me API from XRHealth — 1 operation(s) for me.
+  humanURL: https://developer.xr.health/
+  baseURL: https://api.xr.health/v1
+  tags:
+  - Me
+  properties:
+  - type: OpenAPI
+    url: openapi/xrhealth-me-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.xr.health/
+  - type: Authentication
+    url: authentication/xrhealth-authentication.yml
+  - type: Conventions
+    url: conventions/xrhealth-conventions.yml
+  - type: ErrorCatalog
+    url: errors/xrhealth-problem-types.yml
+  - type: DataModel
+    url: data-model/xrhealth-data-model.yml
+  - type: OAuthScopes
+    url: scopes/xrhealth-scopes.yml
+  - type: RateLimits
+    url: rate-limits/xrhealth-rate-limits.yml
+- aid: xrhealth:xrhealth-openapi-json-api
+  name: XRHealth Openapi.json API
+  description: The Openapi.json API from XRHealth — 1 operation(s) for openapi.json.
+  humanURL: https://developer.xr.health/
+  baseURL: https://api.xr.health/v1
+  tags:
+  - Openapi.json
+  properties:
+  - type: OpenAPI
+    url: openapi/xrhealth-openapi-json-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.xr.health/
+  - type: Authentication
+    url: authentication/xrhealth-authentication.yml
+  - type: Conventions
+    url: conventions/xrhealth-conventions.yml
+  - type: ErrorCatalog
+    url: errors/xrhealth-problem-types.yml
+  - type: DataModel
+    url: data-model/xrhealth-data-model.yml
+  - type: OAuthScopes
+    url: scopes/xrhealth-scopes.yml
+  - type: RateLimits
+    url: rate-limits/xrhealth-rate-limits.yml
+- aid: xrhealth:xrhealth-well-known-api
+  name: XRHealth .well Known API
+  description: The .well Known API from XRHealth — 1 operation(s) for .well known.
+  humanURL: https://developer.xr.health/
+  baseURL: https://api.xr.health/v1
+  tags:
+  - .well Known
+  properties:
+  - type: OpenAPI
+    url: openapi/xrhealth-well-known-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.xr.health/
+  - type: Authentication
+    url: authentication/xrhealth-authentication.yml
+  - type: Conventions
+    url: conventions/xrhealth-conventions.yml
+  - type: ErrorCatalog
+    url: errors/xrhealth-problem-types.yml
+  - type: DataModel
+    url: data-model/xrhealth-data-model.yml
+  - type: OAuthScopes
+    url: scopes/xrhealth-scopes.yml
+  - type: RateLimits
+    url: rate-limits/xrhealth-rate-limits.yml
+- aid: xrhealth:xrhealth-xrhealth-platform-api-api
+  name: XRHealth XRHealth Platform API
+  description: The XRHealth Platform API API from XRHealth — 1 operation(s) for xrhealth platform api.
+  humanURL: https://developer.xr.health/
+  baseURL: https://api.xr.health/v1
+  tags:
+  - XRHealth Platform API
+  properties:
+  - type: OpenAPI
+    url: openapi/xrhealth-xrhealth-platform-api-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.xr.health/
   - type: Authentication
     url: authentication/xrhealth-authentication.yml
   - type: Conventions
@@ -91,6 +167,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/xrhealth-platform-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/xrhealth-agentic-access.yml
 - type: DomainSecurity
