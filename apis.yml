@@ -47,6 +47,8 @@ apis:
   humanURL: https://developer.xr.health/
   baseURL: https://api.xr.health/v1
   tags:
+  - Authentication
+  tags_raw:
   - Auth
   properties:
   - type: OpenAPI
