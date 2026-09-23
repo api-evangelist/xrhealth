@@ -1,0 +1,45 @@
+openapi: 3.2.0
+info:
+  title: XRHealth Platform .well Known API
+  version: 1.0.0
+  description: Common API for XRHealth applications and approved integrations.
+servers:
+- url: /v1
+tags:
+- name: .well Known
+paths:
+  /.well-known/jwks.json:
+    get:
+      operationId: getPatientApiJwks
+      summary: Get the public signing keys for XRHealth patient access tokens
+      responses:
+        '200':
+          description: JSON Web Key Set.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - keys
+                properties:
+                  keys:
+                    type: array
+                    items:
+                      type: object
+        '503':
+          $ref: '#/components/responses/Unavailable'
+      tags:
+      - .well Known
+components:
+  responses:
+    Unavailable:
+      description: The authentication module is temporarily unavailable.
+  securitySchemes:
+    applicationToken:
+      type: apiKey
+      in: header
+      name: X-XRHealth-Application-Token
+    patientBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

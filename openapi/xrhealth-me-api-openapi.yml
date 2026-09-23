@@ -1,0 +1,65 @@
+openapi: 3.2.0
+info:
+  title: XRHealth Platform Me API
+  version: 1.0.0
+  description: Common API for XRHealth applications and approved integrations.
+servers:
+- url: /v1
+tags:
+- name: Me
+paths:
+  /me:
+    get:
+      operationId: getCurrentPatient
+      summary: Get the current public patient subject
+      security:
+      - applicationToken: []
+        patientBearer: []
+      responses:
+        '200':
+          description: The current public patient identity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '503':
+          $ref: '#/components/responses/Unavailable'
+      tags:
+      - Me
+components:
+  schemas:
+    MeResponse:
+      type: object
+      required:
+      - subject
+      - application
+      - scopes
+      properties:
+        subject:
+          type: string
+        application:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+  responses:
+    Forbidden:
+      description: The token does not have access to this resource.
+    Unauthorized:
+      description: The application or patient token is invalid.
+    Unavailable:
+      description: The authentication module is temporarily unavailable.
+  securitySchemes:
+    applicationToken:
+      type: apiKey
+      in: header
+      name: X-XRHealth-Application-Token
+    patientBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

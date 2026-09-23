@@ -1,0 +1,29 @@
+openapi: 3.2.0
+info:
+  title: XRHealth Platform Openapi.json API
+  version: 1.0.0
+  description: Common API for XRHealth applications and approved integrations.
+servers:
+- url: /v1
+tags:
+- name: Openapi.json
+paths:
+  /openapi.json:
+    get:
+      operationId: getOpenApiDocument
+      summary: Get the OpenAPI document
+      responses:
+        '200':
+          description: OpenAPI document
+      tags:
+      - Openapi.json
+components:
+  securitySchemes:
+    applicationToken:
+      type: apiKey
+      in: header
+      name: X-XRHealth-Application-Token
+    patientBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

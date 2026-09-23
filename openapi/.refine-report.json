@@ -1,0 +1,47 @@
+{
+  "provider": "xrhealth",
+  "sources": [
+    "_original/xrhealth-openapi.json"
+  ],
+  "outputs": [
+    "xrhealth-well-known-api-openapi.yml",
+    "xrhealth-auth-api-openapi.yml",
+    "xrhealth-me-api-openapi.yml",
+    "xrhealth-openapi-json-api-openapi.yml",
+    "xrhealth-xrhealth-platform-api-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "xrhealth-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "xrhealth-openapi.json: tagged paths GET / -> XRHealth Platform API",
+    "xrhealth-openapi.json: tagged paths GET /openapi.json -> Openapi.json",
+    "xrhealth-openapi.json: tagged paths POST /auth/passwordless/start -> Auth",
+    "xrhealth-openapi.json: tagged paths POST /auth/passwordless/verify -> Auth",
+    "xrhealth-openapi.json: tagged paths POST /auth/public/passwordless/start -> Auth",
+    "xrhealth-openapi.json: tagged paths POST /auth/public/passwordless/verify -> Auth",
+    "xrhealth-openapi.json: tagged paths POST /auth/public/token -> Auth",
+    "xrhealth-openapi.json: tagged paths POST /auth/public/token/revoke -> Auth",
+    "xrhealth-openapi.json: tagged paths POST /auth/token/refresh -> Auth",
+    "xrhealth-openapi.json: tagged paths POST /auth/token/revoke -> Auth",
+    "xrhealth-openapi.json: tagged paths GET /me -> Me",
+    "xrhealth-openapi.json: tagged paths GET /.well-known/jwks.json -> .well Known",
+    "xrhealth-openapi.json: declared missing tag: .well Known",
+    "xrhealth-openapi.json: declared missing tag: Auth",
+    "xrhealth-openapi.json: declared missing tag: Me",
+    "xrhealth-openapi.json: declared missing tag: Openapi.json",
+    "xrhealth-openapi.json: declared missing tag: XRHealth Platform API",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/xrhealth-platform-openapi.yml: archived document superseded by a larger archived document",
+    "xrhealth-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "xrhealth-me-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "xrhealth-openapi-json-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "xrhealth-well-known-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "xrhealth-xrhealth-platform-api-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
