@@ -34,10 +34,10 @@ components:
   responses:
     Forbidden:
       description: The token does not have access to this resource.
-    Unavailable:
-      description: The authentication module is temporarily unavailable.
     Unauthorized:
       description: The application or patient token is invalid.
+    Unavailable:
+      description: The authentication module is temporarily unavailable.
   schemas:
     MeResponse:
       type: object
