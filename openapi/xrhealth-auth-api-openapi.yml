@@ -208,6 +208,99 @@ paths:
       - Auth
 components:
   schemas:
+    PublicTokenRevokeRequest:
+      type: object
+      required:
+      - client_id
+      - refresh_token
+      properties:
+        client_id:
+          type: string
+          minLength: 8
+          maxLength: 128
+        refresh_token:
+          type: string
+          minLength: 16
+      additionalProperties: false
+    PublicPasswordlessStartRequest:
+      type: object
+      required:
+      - client_id
+      - email
+      - code_challenge
+      - code_challenge_method
+      properties:
+        client_id:
+          type: string
+          minLength: 8
+          maxLength: 128
+        email:
+          type: string
+          format: email
+        code_challenge:
+          type: string
+          minLength: 43
+          maxLength: 128
+        code_challenge_method:
+          type: string
+          enum:
+          - S256
+      additionalProperties: false
+    PublicTokenRequest:
+      type: object
+      required:
+      - client_id
+      - grant_type
+      properties:
+        client_id:
+          type: string
+          minLength: 8
+          maxLength: 128
+        grant_type:
+          type: string
+          enum:
+          - authorization_code
+          - refresh_token
+        authorization_code:
+          type: string
+          minLength: 16
+        code_verifier:
+          type: string
+          minLength: 43
+          maxLength: 128
+        refresh_token:
+          type: string
+          minLength: 16
+      additionalProperties: false
+    AuthorizationCodeResponse:
+      type: object
+      required:
+      - authorization_code
+      - expires_in
+      properties:
+        authorization_code:
+          type: string
+        expires_in:
+          type: integer
+          example: 60
+    RefreshTokenRequest:
+      type: object
+      required:
+      - refresh_token
+      properties:
+        refresh_token:
+          type: string
+          minLength: 16
+      additionalProperties: false
+    PasswordlessStartRequest:
+      type: object
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          format: email
+      additionalProperties: false
     PublicPasswordlessVerifyRequest:
       type: object
       required:
@@ -230,17 +323,23 @@ components:
           type: string
           pattern: ^\d{4,8}$
       additionalProperties: false
-    AuthorizationCodeResponse:
+    PasswordlessVerifyRequest:
       type: object
       required:
-      - authorization_code
-      - expires_in
+      - request_id
+      - email
+      - code
       properties:
-        authorization_code:
+        request_id:
           type: string
-        expires_in:
-          type: integer
-          example: 60
+          format: uuid
+        email:
+          type: string
+          format: email
+        code:
+          type: string
+          pattern: ^\d{4,8}$
+      additionalProperties: false
     TokenResponse:
       type: object
       required:
@@ -272,116 +371,17 @@ components:
         scope:
           type: string
           example: patient:login patient:read
-    PasswordlessVerifyRequest:
-      type: object
-      required:
-      - request_id
-      - email
-      - code
-      properties:
-        request_id:
-          type: string
-          format: uuid
-        email:
-          type: string
-          format: email
-        code:
-          type: string
-          pattern: ^\d{4,8}$
-      additionalProperties: false
-    RefreshTokenRequest:
-      type: object
-      required:
-      - refresh_token
-      properties:
-        refresh_token:
-          type: string
-          minLength: 16
-      additionalProperties: false
-    PublicTokenRevokeRequest:
-      type: object
-      required:
-      - client_id
-      - refresh_token
-      properties:
-        client_id:
-          type: string
-          minLength: 8
-          maxLength: 128
-        refresh_token:
-          type: string
-          minLength: 16
-      additionalProperties: false
-    PublicTokenRequest:
-      type: object
-      required:
-      - client_id
-      - grant_type
-      properties:
-        client_id:
-          type: string
-          minLength: 8
-          maxLength: 128
-        grant_type:
-          type: string
-          enum:
-          - authorization_code
-          - refresh_token
-        authorization_code:
-          type: string
-          minLength: 16
-        code_verifier:
-          type: string
-          minLength: 43
-          maxLength: 128
-        refresh_token:
-          type: string
-          minLength: 16
-      additionalProperties: false
-    PublicPasswordlessStartRequest:
-      type: object
-      required:
-      - client_id
-      - email
-      - code_challenge
-      - code_challenge_method
-      properties:
-        client_id:
-          type: string
-          minLength: 8
-          maxLength: 128
-        email:
-          type: string
-          format: email
-        code_challenge:
-          type: string
-          minLength: 43
-          maxLength: 128
-        code_challenge_method:
-          type: string
-          enum:
-          - S256
-      additionalProperties: false
-    PasswordlessStartRequest:
-      type: object
-      required:
-      - email
-      properties:
-        email:
-          type: string
-          format: email
-      additionalProperties: false
   responses:
-    Unauthorized:
-      description: The application or patient token is invalid.
     Forbidden:
       description: The token does not have access to this resource.
-    RateLimited:
-      description: The request was rate limited.
     Unavailable:
       description: The authentication module is temporarily unavailable.
     BadRequest:
       description: The request is invalid.
+    Unauthorized:
+      description: The application or patient token is invalid.
+    RateLimited:
+      description: The request was rate limited.
   securitySchemes:
     applicationToken:
       type: apiKey
